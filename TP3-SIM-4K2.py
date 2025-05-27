@@ -73,7 +73,7 @@ def simular():
                 
             if int(rango['desde']) <= vector[8] <= int(rango['hasta']):
                 resultados.append(vector.copy())
-        if vector[6] > 125:
+        if vector[6] > int(puntajes['puntajeAsuperar']):
             vector[7] += 1
 
     probabilidad = (vector[7] / iteraciones) * 100

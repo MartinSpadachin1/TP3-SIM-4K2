@@ -7,6 +7,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   const [rangoFin, setRangoFin] = useState('');
   const [puntajeUnTiro, setPuntajeUnTiro] = useState('50');
   const [puntajeDosTiros, setPuntajeDosTiros] = useState('25');
+  const [puntajeAsuperar, setPuntaAsuperar] = useState('150');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
       puntajes: {
         unTiro: pUnTiro,
         dosTiros: pDosTiros,
+        puntajeAsuperar:puntajeAsuperar
       },
     });
 
@@ -121,6 +123,16 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
           className="form-control"
           value={puntajeDosTiros}
           onChange={(e) => setPuntajeDosTiros(e.target.value)}
+          min="0"
+        />
+      </div>
+            <div className="mb-3">
+        <label className="form-label">Puntaje a superar:</label>
+        <input
+          type="number"
+          className="form-control"
+          value={puntajeAsuperar}
+          onChange={(e) => setPuntaAsuperar(e.target.value)}
           min="0"
         />
       </div>
