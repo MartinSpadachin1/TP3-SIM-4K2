@@ -32,7 +32,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
       if (
         isNaN(desde) || isNaN(hasta) ||
         desde < 0 || hasta < 0 ||
-        desde > hasta || hasta >= iter
+        desde > hasta || hasta > iter * 10
       ) {
         setError('Ingrese un rango válido (0 <= desde <= hasta < iteraciones).');
         return;

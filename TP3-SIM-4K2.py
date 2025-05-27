@@ -9,17 +9,18 @@ def resultadoPrimerTiro(numeroAleatorio, intervalos):
         return 3
     elif numeroAleatorio <= intervalos['tres'] + intervalos['dos'] - 1:
         return 2
-    elif numeroAleatorio <=intervalos['dos'] + intervalos['uno'] - 1:
+    elif numeroAleatorio <= intervalos['tres'] + intervalos['dos'] + intervalos['uno'] - 1:
         return 1
     return 0
 
 def resultadoSegundoTiro(cantidadMetros, numeroAleatorio, rango):
+   
     if cantidadMetros == 3:
-        return 3 if numeroAleatorio < int(rango[0]['resultados'][0]['valor'])-1 else 9
+        return 3 if numeroAleatorio <= int(rango[0]['resultados'][0]['valor'])-1 else 9
     elif cantidadMetros == 2:
-        return 2 if numeroAleatorio <= int(rango[2]['resultados'][0]['valor'])-1 else 9 
+        return 2 if numeroAleatorio <= int(rango[1]['resultados'][0]['valor'])-1 else 9 
     elif cantidadMetros == 1:
-        return 1 if numeroAleatorio <= int(rango[3]['resultados'][0]['valor'])- 1 else 9 
+        return 1 if numeroAleatorio <= int(rango[2]['resultados'][0]['valor'])- 1 else 9 
 
 def determinarPuntaje(resultado, puntajes):
     if resultado == 0:
@@ -52,7 +53,7 @@ def simular():
     vector = [0, 0, False, 0, False, 0, 0, 0,0]
     for iter in range(int(iteraciones)):
         vector[6] = 0  # acumulador de puntos
-        vector[8] += 1
+        
         for i in range(10):
             vector[0] = i + 1
             vector[1] = generarNumero()
@@ -60,7 +61,7 @@ def simular():
             vector[3] = 0
             vector[4] = False
             vector[5] = 0
-            
+            vector[8] += 1
             if vector[2] == 0:
                 vector[5] = determinarPuntaje(vector[2], puntajes)
             else:
@@ -69,11 +70,11 @@ def simular():
                 vector[5] = determinarPuntaje(vector[4], puntajes)
 
             vector[6] += vector[5]
-
+                
+            if int(rango['desde']) <= vector[8] <= int(rango['hasta']):
+                resultados.append(vector.copy())
         if vector[6] > 125:
             vector[7] += 1
-        if int(rango['desde']) <= vector[8] <= int(rango['hasta']):
-            resultados.append(vector.copy())
 
     probabilidad = (vector[7] / iteraciones) * 100
 
