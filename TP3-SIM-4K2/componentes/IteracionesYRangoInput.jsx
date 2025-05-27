@@ -7,51 +7,55 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   const [rangoFin, setRangoFin] = useState('');
   const [puntajeUnTiro, setPuntajeUnTiro] = useState('50');
   const [puntajeDosTiros, setPuntajeDosTiros] = useState('25');
-  const [puntajeAsuperar, setPuntaAsuperar] = useState('150');
+  const [puntajeAsuperar, setPuntajeAsuperar] = useState('150');
+
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const iter = parseInt(iteraciones, 10);
-    const desde = parseInt(rangoInicio, 10);
-    const hasta = parseInt(rangoFin, 10);
-    const pUnTiro = parseInt(puntajeUnTiro, 10);
-    const pDosTiros = parseInt(puntajeDosTiros, 10);
+  const iter = parseInt(iteraciones, 10);
+  const desde = parseInt(rangoInicio, 10);
+  const hasta = parseInt(rangoFin, 10);
+  const pUnTiro = parseInt(puntajeUnTiro, 10);
+  const pDosTiros = parseInt(puntajeDosTiros, 10);
+  const pSuperar = parseInt(puntajeAsuperar, 10);
 
-    if (isNaN(iter) || iter <= 0) {
-      setError('Ingrese una cantidad de iteraciones válida (> 0).');
-      return;
-    }
+  if (isNaN(iter) || iter <= 0) {
+    setError('Ingrese una cantidad de iteraciones válida (> 0).');
+    return;
+  }
 
+  if ([pUnTiro, pDosTiros, pSuperar].some(p => isNaN(p) || p < 0)) {
+    setError('Ingrese puntajes válidos (números enteros >= 0).');
+    return;
+  }
+
+  if (mostrarRango === 'si') {
     if (
-      [pUnTiro, pDosTiros].some(p => isNaN(p) || p < 0)
+      isNaN(desde) || isNaN(hasta) ||
+      desde < 0 || hasta < 0 ||
+      desde > hasta || hasta > iter * 10
     ) {
-      setError('Ingrese puntajes válidos (números enteros >= 0).');
+      setError('Ingrese un rango válido (0 <= desde <= hasta < iteraciones).');
       return;
     }
+  }
 
-    if (mostrarRango === 'si') {
-      if (
-        isNaN(desde) || isNaN(hasta) ||
-        desde < 0 || hasta < 0 ||
-        desde > hasta || hasta > iter * 10
-      ) {
-        setError('Ingrese un rango válido (0 <= desde <= hasta < iteraciones).');
-        return;
-      }
-    }
-
-    setError('');
-    onSubmit({
-      iteraciones: iter,
-      rango: mostrarRango === 'si' ? { desde, hasta } : null,
-      puntajes: {
-        unTiro: pUnTiro,
-        dosTiros: pDosTiros,
-        puntajeAsuperar:puntajeAsuperar
-      },
-    });
-
-  }, [iteraciones, rangoInicio, rangoFin, mostrarRango, puntajeUnTiro, puntajeDosTiros, onSubmit]);
+  setError('');
+  onSubmit({
+    iteraciones: iter,
+    rango: mostrarRango === 'si' ? { desde, hasta } : null,
+    puntajes: {
+      unTiro: pUnTiro,
+      dosTiros: pDosTiros,
+      puntajeAsuperar: pSuperar,
+    },
+  });
+}, [
+  iteraciones, rangoInicio, rangoFin,
+  mostrarRango, puntajeUnTiro, puntajeDosTiros,
+  puntajeAsuperar,  // <— aquí
+  onSubmit
+]);
 
   return (
     <div style={{ maxWidth: '400px', margin: 'auto' }}>
@@ -132,7 +136,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
           type="number"
           className="form-control"
           value={puntajeAsuperar}
-          onChange={(e) => setPuntaAsuperar(e.target.value)}
+          onChange={(e) => setPuntajeAsuperar(e.target.value)}
           min="0"
         />
       </div>

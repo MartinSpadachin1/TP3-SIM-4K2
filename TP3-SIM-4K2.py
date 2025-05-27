@@ -47,13 +47,13 @@ def simular():
         'dos': int(rangoPrimerTiro[1]['valor']),
         'uno': int(rangoPrimerTiro[2]['valor'])
     }
-    print(intervalos)
+    
     resultados = []
    
     vector = [0, 0, False, 0, False, 0, 0, 0,0]
     for iter in range(int(iteraciones)):
         vector[6] = 0  # acumulador de puntos
-        
+        flag = False
         for i in range(10):
             vector[0] = i + 1
             vector[1] = generarNumero()
@@ -71,10 +71,18 @@ def simular():
 
             vector[6] += vector[5]
                 
-            if int(rango['desde']) <= vector[8] <= int(rango['hasta']):
+            if (
+                rango is not None and 
+                rango.get('desde') is not None and 
+                rango.get('hasta') is not None and 
+                int(rango['desde']) <= vector[8] <= int(rango['hasta'])
+            ):
                 resultados.append(vector.copy())
-        if vector[6] > int(puntajes['puntajeAsuperar']):
-            vector[7] += 1
+
+         
+            if vector[6] > int(puntajes['puntajeAsuperar']) and flag is not True :
+                    flag = True
+                    vector[7] += 1
 
     probabilidad = (vector[7] / iteraciones) * 100
 
