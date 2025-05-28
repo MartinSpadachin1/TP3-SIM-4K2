@@ -41,6 +41,7 @@ def simular():
     rangoSegundoTiro = data['datosSegundaBola']
     puntajes = data['iteracionesYRango']['puntajes']  # {'unTiro': int, 'dosTiros': int}
     rango = data['iteracionesYRango']['rango'] 
+    hoyos = int(data['iteracionesYRango']['cantidadHoyos'])
     # Intervalos configurables (puedes hacerlos dinámicos también si querés)
     intervalos = {
         'tres': int(rangoPrimerTiro[0]['valor']),
@@ -54,7 +55,7 @@ def simular():
     for iter in range(int(iteraciones)):
         vector[6] = 0  # acumulador de puntos
         flag = False
-        for i in range(10):
+        for i in range(hoyos):
             vector[0] = i + 1
             vector[1] = generarNumero()
             vector[2] = resultadoPrimerTiro(vector[1], intervalos)

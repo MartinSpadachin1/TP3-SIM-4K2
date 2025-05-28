@@ -8,7 +8,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   const [puntajeUnTiro, setPuntajeUnTiro] = useState('50');
   const [puntajeDosTiros, setPuntajeDosTiros] = useState('25');
   const [puntajeAsuperar, setPuntajeAsuperar] = useState('150');
-
+  const [cantidadHoyos, setCantidadHoyos] = useState('10');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -18,13 +18,13 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   const pUnTiro = parseInt(puntajeUnTiro, 10);
   const pDosTiros = parseInt(puntajeDosTiros, 10);
   const pSuperar = parseInt(puntajeAsuperar, 10);
-
+  const hoyos = parseInt(cantidadHoyos, 10);
   if (isNaN(iter) || iter <= 0) {
     setError('Ingrese una cantidad de iteraciones válida (> 0).');
     return;
   }
 
-  if ([pUnTiro, pDosTiros, pSuperar].some(p => isNaN(p) || p < 0)) {
+  if ([pUnTiro, pDosTiros, pSuperar,hoyos].some(p => isNaN(p) || p < 0)) {
     setError('Ingrese puntajes válidos (números enteros >= 0).');
     return;
   }
@@ -48,12 +48,14 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
       unTiro: pUnTiro,
       dosTiros: pDosTiros,
       puntajeAsuperar: pSuperar,
+      
     },
+    cantidadHoyos: hoyos
   });
 }, [
   iteraciones, rangoInicio, rangoFin,
   mostrarRango, puntajeUnTiro, puntajeDosTiros,
-  puntajeAsuperar,  // <— aquí
+  puntajeAsuperar,cantidadHoyos,  // <— aquí
   onSubmit
 ]);
 
@@ -67,6 +69,16 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
           value={iteraciones}
           onChange={(e) => setIteraciones(e.target.value)}
           placeholder="Ej: 1000"
+        />
+      </div>
+            <div className="mb-3">
+        <label className="form-label">Cantidad de hoyos:</label>
+        <input
+          type="number"
+          className="form-control"
+          value={cantidadHoyos}
+          onChange={(e) => setCantidadHoyos(e.target.value)}
+          placeholder="Ej: 10"
         />
       </div>
 

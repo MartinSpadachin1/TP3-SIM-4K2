@@ -16,6 +16,22 @@ import IteracionesYRangoInput from "../componentes/IteracionesYRangoInput";
 import axios from "axios";
 
 function App() {
+  const valor ={
+    '0':"Emboca",
+    '1':"Entre 1 y casi 0",
+    '2':"Entre 3 y 1",
+    '3':"Más de 3",
+    'true':"Emboca",
+    'false':"-",
+    '9':"-"
+  }
+  const resultado={
+    '3':"Emboca",
+    '2':"Emboca",
+    '1':"Emboca",
+    'false':'-',
+    "9": "Falla"
+  }
   // Estados para datos de tablas (para validar y enviar)
   const [probabilidades, setProbabilidades] = useState([
     { rango: "Más de 3", valor: "40" },
@@ -174,7 +190,7 @@ function App() {
                   <thead>
                     <tr>
                       <th>Reloj</th>
-                      <th>i</th>
+                      <th>Hoyo N°:</th>
                       <th>Número Aleatorio</th>
                       <th>Resultado Primer Tiro</th>
                       <th>Número Aleatorio Segundo</th>
@@ -190,9 +206,9 @@ function App() {
                         <td>{vec[8]}</td>
                         <td>{vec[0]}</td>
                         <td>{vec[1].toFixed(2)}</td>
-                        <td>{vec[2]}</td>
+                        <td>{valor[vec[2]]}</td>
                         <td>{vec[3]?.toFixed(2) || "-"}</td>
-                        <td>{vec[4] === true ? "Emboca" : vec[4] === false ? "Falla" : "-"}</td>
+                        <td>{resultado[vec[4]]}</td>
                         <td>{vec[5]}</td>
                         <td>{vec[6]}</td>
                         <td>{vec[7]}</td>
