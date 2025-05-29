@@ -69,6 +69,7 @@ function App() {
   // Estado para resultados y modal
   const [showModal, setShowModal] = useState(false);
   const [resultados, setResultados] = useState(null);
+  const puntosProb = iteracionesYRango?.puntajes.puntajeAsuperar;
 
   // Validaciones
   const validarProbabilidades = () => {
@@ -92,7 +93,7 @@ function App() {
       }
     }
 
-    if (!iteracionesYRango || !iteracionesYRango.iteraciones || iteracionesYRango.iteraciones <= 0) {
+    if (!iteracionesYRango || !iteracionesYRango.rondas || iteracionesYRango.rondas <= 0) {
       setError("Debe ingresar una cantidad válida de iteraciones.");
       return false;
     }
@@ -184,12 +185,12 @@ function App() {
             {resultados && (
               <>
                 <h5>
-                  Probabilidad de más de 125 puntos: <strong>{resultados.probabilidad.toFixed(2)}%</strong>
+                  Probabilidad de más de {(puntosProb) ? puntosProb: 0} puntos: <strong>{resultados.probabilidad.toFixed(2)}%</strong>
                 </h5>
                 <Table striped bordered hover responsive>
                   <thead>
                     <tr>
-                      <th>Reloj</th>
+                      <th>Ronda N°:</th>
                       <th>Hoyo N°:</th>
                       <th>Número Aleatorio</th>
                       <th>Resultado Primer Tiro</th>
@@ -203,15 +204,15 @@ function App() {
                   <tbody>
                     {resultados.vectores.map((vec, index) => (
                       <tr key={index}>
-                        <td>{vec[8]}</td>
                         <td>{vec[0]}</td>
-                        <td>{vec[1].toFixed(2)}</td>
-                        <td>{valor[vec[2]]}</td>
-                        <td>{vec[3]?.toFixed(2) || "-"}</td>
-                        <td>{resultado[vec[4]]}</td>
-                        <td>{vec[5]}</td>
+                        <td>{vec[1]}</td>
+                        <td>{vec[2].toFixed(2)}</td>
+                        <td>{valor[vec[3]]}</td>
+                        <td>{vec[4]?.toFixed(2) || "-"}</td>
+                        <td>{resultado[vec[5]]}</td>
                         <td>{vec[6]}</td>
                         <td>{vec[7]}</td>
+                        <td>{vec[8]}</td>
                       </tr>
                     ))}
                   </tbody>

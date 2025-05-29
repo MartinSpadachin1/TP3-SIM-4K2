@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 const IteracionesYRangoInput = ({ onSubmit }) => {
-  const [iteraciones, setIteraciones] = useState('');
+  const [rondass, setRondass] = useState('');
   const [mostrarRango, setMostrarRango] = useState('no');
-  const [rangoInicio, setRangoInicio] = useState('');
-  const [rangoFin, setRangoFin] = useState('');
+  const [rondaInicioMuestra, setRondaInicioMuestra] = useState('');
+  const [cantRondasAMostrar, setCantRondasAMostrar] = useState('');
   const [puntajeUnTiro, setPuntajeUnTiro] = useState('50');
   const [puntajeDosTiros, setPuntajeDosTiros] = useState('25');
   const [puntajeAsuperar, setPuntajeAsuperar] = useState('150');
@@ -12,15 +12,15 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-  const iter = parseInt(iteraciones, 10);
-  const desde = parseInt(rangoInicio, 10);
-  const hasta = parseInt(rangoFin, 10);
+  const rondas = parseInt(rondass, 10);
+  const desde = parseInt(rondaInicioMuestra, 10);
+  const hasta = desde + parseInt(cantRondasAMostrar, 10);
   const pUnTiro = parseInt(puntajeUnTiro, 10);
   const pDosTiros = parseInt(puntajeDosTiros, 10);
   const pSuperar = parseInt(puntajeAsuperar, 10);
   const hoyos = parseInt(cantidadHoyos, 10);
-  if (isNaN(iter) || iter <= 0) {
-    setError('Ingrese una cantidad de iteraciones válida (> 0).');
+  if (isNaN(rondas) || rondas <= 0) {
+    setError('Ingrese una cantidad de rondas válida (> 0).');
     return;
   }
 
@@ -29,20 +29,9 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
     return;
   }
 
-  if (mostrarRango === 'si') {
-    if (
-      isNaN(desde) || isNaN(hasta) ||
-      desde < 0 || hasta < 0 ||
-      desde > hasta || hasta > iter * 10
-    ) {
-      setError('Ingrese un rango válido (0 <= desde <= hasta < iteraciones).');
-      return;
-    }
-  }
-
   setError('');
   onSubmit({
-    iteraciones: iter,
+    rondas: rondas,
     rango: mostrarRango === 'si' ? { desde, hasta } : null,
     puntajes: {
       unTiro: pUnTiro,
@@ -53,7 +42,7 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
     cantidadHoyos: hoyos
   });
 }, [
-  iteraciones, rangoInicio, rangoFin,
+  rondass, rondaInicioMuestra, cantRondasAMostrar,
   mostrarRango, puntajeUnTiro, puntajeDosTiros,
   puntajeAsuperar,cantidadHoyos,  // <— aquí
   onSubmit
@@ -62,28 +51,46 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
   return (
     <div style={{ maxWidth: '400px', margin: 'auto' }}>
       <div className="mb-3">
-        <label className="form-label">Cantidad de iteraciones:</label>
+        <label className="form-label">Cantidad de Rondas:</label>
         <input
           type="number"
           className="form-control"
-          value={iteraciones}
-          onChange={(e) => setIteraciones(e.target.value)}
+          value={rondass}
+          onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || parseInt(value, 10) >= 1) {
+                          setRondass(value);
+                          setError('');
+                        } else {
+                          setError('No se permiten valores negativos ni cero.');
+                        }
+                      }}
           placeholder="Ej: 1000"
+          min={1}
         />
       </div>
             <div className="mb-3">
-        <label className="form-label">Cantidad de hoyos:</label>
+        <label className="form-label">Cantidad de hoyos por ronda:</label>
         <input
           type="number"
           className="form-control"
           value={cantidadHoyos}
-          onChange={(e) => setCantidadHoyos(e.target.value)}
+          onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || parseInt(value, 10) >= 1) {
+                          setCantidadHoyos(value);
+                          setError('');
+                        } else {
+                          setError('No se permiten valores negativos ni cero.');
+                        }
+                      }}
           placeholder="Ej: 10"
+          min={1}
         />
       </div>
 
       <div className="mb-3">
-        <label className="form-label">¿Desea mostrar un rango de vectores?</label>
+        <label className="form-label">¿Desea mostrar rondas?</label>
         <select
           className="form-select"
           value={mostrarRango}
@@ -97,23 +104,41 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
       {mostrarRango === 'si' && (
         <>
           <div className="mb-3">
-            <label className="form-label">Desde:</label>
+            <label className="form-label">Cantidad de Rondas a mostrar:</label>
             <input
               type="number"
               className="form-control"
-              value={rangoInicio}
-              onChange={(e) => setRangoInicio(e.target.value)}
+              value={cantRondasAMostrar}
+              onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === '' || parseInt(value, 10) >= 1) {
+                              setCantRondasAMostrar(value);
+                              setError('');
+                            } else {
+                              setError('No se permiten valores negativos ni cero.');
+                            }
+                          }}
               placeholder="Ej: 10"
+              min={1}
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Hasta:</label>
+            <label className="form-label">Mostrar desde la Ronda número:</label>
             <input
               type="number"
               className="form-control"
-              value={rangoFin}
-              onChange={(e) => setRangoFin(e.target.value)}
+              value={rondaInicioMuestra}
+              onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === '' || parseInt(value, 10) >= 1) {
+                              setRondaInicioMuestra(value);
+                              setError('');
+                            } else {
+                              setError('No se permiten valores negativos ni cero.');
+                            }
+                          }}
               placeholder="Ej: 20"
+              min={1}
             />
           </div>
         </>
@@ -128,7 +153,15 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
           type="number"
           className="form-control"
           value={puntajeUnTiro}
-          onChange={(e) => setPuntajeUnTiro(e.target.value)}
+          onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || parseInt(value, 10) >= 0) {
+                          setPuntajeUnTiro(value);
+                          setError('');
+                        } else {
+                          setError('No se permiten valores negativos.');
+                        }
+                      }}
           min="0"
         />
       </div>
@@ -138,17 +171,33 @@ const IteracionesYRangoInput = ({ onSubmit }) => {
           type="number"
           className="form-control"
           value={puntajeDosTiros}
-          onChange={(e) => setPuntajeDosTiros(e.target.value)}
+          onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || parseInt(value, 10) >= 0) {
+                          setPuntajeDosTiros(value);
+                          setError('');
+                        } else {
+                          setError('No se permiten valores negativos.');
+                        }
+                      }}
           min="0"
         />
       </div>
             <div className="mb-3">
-        <label className="form-label">Puntaje a superar:</label>
+        <label className="form-label">Puntaje a superar por ronda:</label>
         <input
           type="number"
           className="form-control"
           value={puntajeAsuperar}
-          onChange={(e) => setPuntajeAsuperar(e.target.value)}
+          onChange={(e) => {
+                        const value = e.target.value;
+                        if (value === '' || parseInt(value, 10) >= 0) {
+                          setPuntajeAsuperar(value);
+                          setError('');
+                        } else {
+                          setError('No se permiten valores negativos.');
+                        }
+                      }}
           min="0"
         />
       </div>
